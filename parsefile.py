@@ -19,4 +19,16 @@ class Parser():
         for item in self.list:
             item.replace(self.endof,"")
 
+class Joiner():
+    pass
+
+class Opener():
+    def __init__(self, fileName):
+        import os
+        self.fileName = os.path.join(os.path.realpath(os.path.dirname(__file__)), fileName)
+
+    def open(self):
+        with open(self.fileName,"r") as fileC:
+            return fileC.read()
+
 
