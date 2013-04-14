@@ -28,4 +28,5 @@ if "__main__" == __name__:
                         userFileListSave=userFileListSave, userListSave=userListSave,
                         compiledSave=compiledSave, fileOutputName=fileOutputName,
                         allOutputSave=allOutputSave, succesOutputSave=succesOutputSave)
+
     coder.run()
