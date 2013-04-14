@@ -1,24 +1,31 @@
 class Coder():
-    def __init__(self, path, userFileName, rootFileName):
+    def __init__(self, session):
         import logging
         logging.basicConfig(level=logging.INFO)
 
+        self.session = session
+
+        self.userList = []
+        self.fileList = []
+
+    def setParameters(self, path, userFileName, rootFileName, userFileListSave, userListSave):
         self.path = path
         self.userFileName = userFileName
         self.rootFileName = rootFileName
-        self.userList = []
-        self.fileList = []
-        self.userFileListSave = "/home/halit/coder/test/userFileList.json"
-        self.userListSave = "/home/halit/coder/test/userList.json"
+        self.userFileListSave = userFileListSave
+        self.userListSave = userListSave
 
     def run(self):
+        """ Code starting """
         import logging
 
         logging.info("user list creating")
         self.user_lister(self.path, self.userListSave)
+        logging.info("user list created")
 
         logging.info("user file list creating")
         self.file_lister(self.userListSave, self.userFileListSave)
+        logging.info("user file list created")
 
     def user_lister(self, path, fileName):
         """ List directories in path """
