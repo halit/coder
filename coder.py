@@ -29,11 +29,11 @@ class Coder():
         import logging
 
         logging.info("user list creating")
-        self.user_lister(self.path, self.userListSave)
+        self.user_lister()
         logging.info("user list created")
 
         logging.info("user file list creating")
-        self.file_lister(self.userFileListSave)
+        self.file_lister()
         logging.info("user file list created")
 
         logging.info("codes compiling")
@@ -44,18 +44,18 @@ class Coder():
         self.code_control()
         logging.info("all output files checked")
 
-    def user_lister(self, path, fileName):
+    def user_lister(self):
         """ List directories in path """
         import os, logging
-        logging.info("walking directories in " + path)
+        logging.info("walking directories in " + self.path)
 
-        for dirname, dirnames, filenames in os.walk(path):
+        for dirname, dirnames, filenames in os.walk(self.path):
             for subdirname in dirnames:
-                self.userList.append(os.path.join(path, subdirname))
+                self.userList.append(os.path.join(self.path, subdirname))
 
-        self.save_file(self.userList, fileName)
+        self.save_file(self.userList, self.userFileListSave)
 
-    def file_lister(self, fileName):
+    def file_lister(self):
         """ List files which name equal fileName"""
         import os
         for user in self.userList:
@@ -64,7 +64,7 @@ class Coder():
                     if(self.userFileName == filename):
                         self.fileList.append(os.path.join(user, filename))
 
-        self.save_file(self.fileList, fileName)
+        self.save_file(self.fileList, self.userFileListSave)
 
     def code_compiler(self):
         """ Compile c source codes in fileList """
