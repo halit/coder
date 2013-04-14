@@ -8,15 +8,21 @@ class Coder():
         self.userList = []
         self.fileList = []
         self.compiledList = []
+        self.allOutputList = []
+        self.succesOutputList = []
 
     def setParameters(self, path, userFileName, rootFileName,
-                      userFileListSave, userListSave, compiledSave):
+                      userFileListSave, userListSave, compiledSave,
+                      fileOutputName, allOutputSave, succesOutputSave):
         self.path = path
         self.userFileName = userFileName
         self.rootFileName = rootFileName
         self.userFileListSave = userFileListSave
         self.userListSave = userListSave
         self.compiledSave = compiledSave
+        self.fileOutputName = fileOutputName
+        self.allOutputSave = allOutputSave
+        self.succesOutputSave = succesOutputSave
 
     def run(self):
         """ Code starting """
@@ -33,6 +39,10 @@ class Coder():
         logging.info("codes compiling")
         self.code_compiler()
         logging.info("all codes compiled")
+
+        logging.info("output files checking")
+        self.code_control()
+        logging.info("all output files checked")
 
     def user_lister(self, path, fileName):
         """ List directories in path """
@@ -74,12 +84,29 @@ class Coder():
 
         self.save_file(self.compiledList, self.compiledSave)
 
-    def code_control(self, rootFileName, outputList):
+    def code_control(self):
         """ Control diff rootFileName with outputList """
-        pass
+        import logging, os
+        for user in self.userList:
+            userFile = os.path.join(user, self.fileOutputName)
+            self.allOutputList.append(userFile)
+            if self.is_same(userFile, self.rootFileName):
+                self.succesOutputList.append(userFile)
+
+        self.save_file(self.allOutputList, self.allOutputSave)
+        self.save_file(self.succesOutputList, self.succesOutputSave)
+
     def save_file(self, fileList, fileName):
         """ Save fileList as fileName in json """
         import json, logging
         with open(fileName,'wb') as fp:
             logging.info("file saving as " + fileName)
             json.dump(fileList, fp, indent=2)
+
+    def is_same(self, user_file, target_file):
+        import filecmp, logging
+        try:
+            return filecmp.cmp(user_file, target_file)
+        except:
+            logging.warning("output file error: " + user_file)
+            logging.info("passing")
