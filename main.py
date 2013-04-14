@@ -1,14 +1,26 @@
-import coder
+import coder, time, os
 
-if __name__ == "__main__":
+if "__main__" == __name__:
 
-    path             = "/home/halit/coder/test"
-    userFileName     = "matris.c"
-    rootFileName     = "/home/halit/output.txt"
-    userFileListSave = "/home/halit/coder/test/userFileList.json"
-    userListSave     = "/home/halit/coder/test/userList.json"
+    path = "/home/halit/coder/test"
+    userFileName = "matris.c"
+    rootFileName = "/home/halit/output.txt"
 
-    coder = coder.Coder("1")
-    coder.setParameters(path=path, userFileName=userFileName, rootFileName=rootFileName)
-    coder.setParameters(userFileListSave=userFileListSave, userListSave=userListSave)
+    session = str(time.time()).split(".")[0] + str(time.time()).split(".")[1]
+    sessionDir = os.path.join(os.path.join(path,"sessions"), session)
+
+    try:
+        os.mkdir(os.path.join(path,"sessions"))
+    except:
+        pass
+
+    os.mkdir(sessionDir)
+    userFileListSave = os.path.join(sessionDir, "userFileList.json")
+    userListSave = os.path.join(sessionDir, "userList.json")
+    compiledSave = os.path.join(sessionDir, "compiled.json")
+
+    coder = coder.Coder(session)
+    coder.setParameters(path=path, userFileName=userFileName, rootFileName=rootFileName,
+                        userFileListSave=userFileListSave, userListSave=userListSave,
+                        compiledSave=compiledSave)
     coder.run()

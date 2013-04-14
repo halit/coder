@@ -2,18 +2,21 @@ class Coder():
     def __init__(self, session):
         import logging
         logging.basicConfig(level=logging.INFO)
+        logging.info("session: " + session + " starting")
 
         self.session = session
-
         self.userList = []
         self.fileList = []
+        self.compiledList = []
 
-    def setParameters(self, path, userFileName, rootFileName, userFileListSave, userListSave):
+    def setParameters(self, path, userFileName, rootFileName,
+                      userFileListSave, userListSave, compiledSave):
         self.path = path
         self.userFileName = userFileName
         self.rootFileName = rootFileName
         self.userFileListSave = userFileListSave
         self.userListSave = userListSave
+        self.compiledSave = compiledSave
 
     def run(self):
         """ Code starting """
@@ -24,8 +27,12 @@ class Coder():
         logging.info("user list created")
 
         logging.info("user file list creating")
-        self.file_lister(self.userListSave, self.userFileListSave)
+        self.file_lister(self.userFileListSave)
         logging.info("user file list created")
+
+        logging.info("codes compiling")
+        self.code_compiler()
+        logging.info("all codes compiled")
 
     def user_lister(self, path, fileName):
         """ List directories in path """
@@ -38,13 +45,10 @@ class Coder():
 
         self.save_file(self.userList, fileName)
 
-    def file_lister(self, userList, fileName):
+    def file_lister(self, fileName):
         """ List files which name equal fileName"""
-        import json, os
-        with open(userList, 'rb') as fp:
-            user_list = json.load(fp)
-
-        for user in user_list:
+        import os
+        for user in self.userList:
             for dirname, dirnames, filenames in os.walk(user):
                 for filename in filenames:
                     if(self.userFileName == filename):
@@ -52,9 +56,24 @@ class Coder():
 
         self.save_file(self.fileList, fileName)
 
-    def code_compiler(self, fileList):
+    def code_compiler(self):
         """ Compile c source codes in fileList """
-        pass
+        import logging, commands
+        for fileName in self.fileList:
+            compiledName =  str(fileName).rstrip(".c")
+            compile_error = commands.getstatusoutput("gcc " + fileName +
+                                                     " -o " + compiledName)
+            if(compile_error[0]):
+                logging.info("compile error: " + fileName)
+                logging.info(compile_error[1])
+            else:
+                logging.info("succesfully compile: " + fileName)
+                self.compiledList.append(compiledName)
+                runner_error = commands.getoutput(compiledName)
+                logging.info("runned file output: " + runner_error)
+
+        self.save_file(self.compiledList, self.compiledSave)
+
     def code_control(self, rootFileName, outputList):
         """ Control diff rootFileName with outputList """
         pass
