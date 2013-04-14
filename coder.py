@@ -14,6 +14,8 @@ class Coder():
     def setParameters(self, path, userFileName, rootFileName,
                       userFileListSave, userListSave, compiledSave,
                       fileOutputName, allOutputSave, succesOutputSave):
+        """ Set all variables for use """
+
         self.path = path
         self.userFileName = userFileName
         self.rootFileName = rootFileName
@@ -26,8 +28,8 @@ class Coder():
 
     def run(self):
         """ Code starting """
-        import logging
 
+        import logging
         logging.info("user list creating")
         self.user_lister()
         logging.info("user list created")
@@ -46,6 +48,7 @@ class Coder():
 
     def user_lister(self):
         """ List directories in path """
+
         import os, logging
         logging.info("walking directories in " + self.path)
 
@@ -57,6 +60,7 @@ class Coder():
 
     def file_lister(self):
         """ List files which name equal fileName"""
+
         import os
         for user in self.userList:
             for dirname, dirnames, filenames in os.walk(user):
@@ -68,6 +72,7 @@ class Coder():
 
     def code_compiler(self):
         """ Compile c source codes in fileList """
+
         import logging, commands
         for fileName in self.fileList:
             compiledName =  str(fileName).rstrip(".c")
@@ -86,7 +91,8 @@ class Coder():
 
     def code_control(self):
         """ Control diff rootFileName with outputList """
-        import logging, os
+
+        import os
         for user in self.userList:
             userFile = os.path.join(user, self.fileOutputName)
             self.allOutputList.append(userFile)
@@ -98,6 +104,7 @@ class Coder():
 
     def save_file(self, fileList, fileName):
         """ Save fileList as fileName in json """
+
         import json, logging
         with open(fileName,'wb') as fp:
             logging.info("file saving as " + fileName)
@@ -105,6 +112,7 @@ class Coder():
 
     def is_same(self, user_file, target_file):
         """ File control if is same """
+
         import filecmp, logging
         try:
             return filecmp.cmp(user_file, target_file)
