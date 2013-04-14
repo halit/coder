@@ -20,7 +20,12 @@ class Parser():
             item.replace(self.endof,"")
 
 class Joiner():
-    pass
+    def __init__(self, rootFile, userFile):
+        self.rootFile = rootFile
+        self.userFile = userFile
+
+    def join(self):
+        pass
 
 class Opener():
     def __init__(self, fileName):
@@ -31,4 +36,10 @@ class Opener():
         with open(self.fileName,"r") as fileC:
             return fileC.read()
 
+class Comparer():
+    def __init__(self, rootFile, userFile):
+        self.rootFile = rootFile
+        self.userFile = userFile
 
+    def compare(self):
+        pass
