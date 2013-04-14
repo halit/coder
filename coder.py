@@ -104,6 +104,7 @@ class Coder():
             json.dump(fileList, fp, indent=2)
 
     def is_same(self, user_file, target_file):
+        """ File control if is same """
         import filecmp, logging
         try:
             return filecmp.cmp(user_file, target_file)
