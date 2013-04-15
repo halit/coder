@@ -9,3 +9,8 @@ void bar(){
     printf("foobar");
 }
 #end#
+
+void test(){
+    printf("hello world");
+}
+#end#
